@@ -77,7 +77,8 @@
         function completeAppointment(id) {
             if (!confirm('確定要將此筆掛號標記為「看診完成」嗎？')) return;
 
-            fetch('/api/appointments/' + id + '/status', {
+            // 🌟 修正點：使用反單引號與 ${id}，確保變數能被 JavaScript 引擎精準解析
+            fetch(`/api/appointments/${id}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: 'COMPLETED' })
@@ -95,7 +96,8 @@
         function cancelAppointment(id) {
             if (!confirm('確定要取消這筆掛號嗎？')) return;
 
-            fetch('/api/appointments/' + id + '/status', {
+            // 🌟 修正點：使用反單引號與 ${id}，確保變數能被 JavaScript 引擎精準解析
+            fetch(`/api/appointments/${id}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: 'CANCELLED' })
