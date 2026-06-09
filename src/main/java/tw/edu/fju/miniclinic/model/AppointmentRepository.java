@@ -3,6 +3,7 @@ package tw.edu.fju.miniclinic.model;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
+import org.springframework.stereotype.Repository;
 import java.util.List;
 import tw.edu.fju.miniclinic.model.Appointment;
 
@@ -21,4 +22,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> findByPatient(Patient patient);
     List<Appointment> findByDoctorAndApptDate(Doctor doctor, LocalDate apptDate);
     long countByApptDateBetween(LocalDate from, LocalDate to);
+    // 🌟 請在檔案裡加上這一行新方法
+    List<Appointment> findByDoctorAndStatus(Doctor doctor, String status);
 }

@@ -29,13 +29,15 @@ public class DashboardController {
         Doctor doctor = doctorRepo.findById(doctorId).orElse(null);
 
         // Session 裡的 doctorId 查不到對應醫師（資料被刪除等異常情況）
+        // 修正排查提示
         if (doctor == null) {
             session.invalidate();
             return "redirect:/login";
         }
 
         LocalDate today = LocalDate.now();
-        List<Appointment> myAppointments = appointmentRepo.findByDoctorAndApptDate(doctor, today);
+        // 🌟 核心修正：將原本的 findByDoctorAndApptDate 改為不限日期、只比對狀態為預約成功（BOOKED）的掛號
+        List<Appointment> myAppointments = appointmentRepo.findByDoctorAndStatus(doctor, "BOOKED");
 
         model.addAttribute("doctor", doctor);
         model.addAttribute("appointments", myAppointments);
