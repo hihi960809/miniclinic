@@ -20,3 +20,5 @@ INSERT INTO appointment (appt_id, chart_no, doctor_id, appt_date, time_slot, sta
     (2, 'TEST00002', 'D002', '2026-05-01', 'AM', 'BOOKED'),
     (3, 'TEST00003', 'D003', '2026-05-02', 'PM', 'BOOKED')
 ON CONFLICT (appt_id) DO NOTHING;
+-- 修正掛號資料表的自動遞增計數器，讓它下次從 4 開始發號碼牌
+SELECT setval(pg_get_serial_sequence('appointment', 'appt_id'), COALESCE(MAX(appt_id), 0)) FROM appointment;
