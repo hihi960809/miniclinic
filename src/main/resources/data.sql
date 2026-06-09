@@ -5,7 +5,7 @@ INSERT INTO doctor (doctor_id, name, department, specialty, password_hash) VALUE
     ('D003', '王建華醫師', '復健科', '運動傷害、脊椎復健', '$2a$10$4fZBPZq1NJmqW5MUgOUsqukV6OiTJutAKR/WbiFiQ6PRTjFbNsMFy'),
     ('D004', '李美玲醫師', '小兒科', '兒童感冒、疫苗接種',  '$2a$10$ZlsUgEo2MOm0RYxwcP55qukrjipEXYNKyyRfdIKkOEv7RpuXEPhxK'),
     ('D005', '張雅筑醫師', '身心科', '焦慮、失眠、情緒調適', '$2a$10$XsgY9Cmk7PqJ2pve2k4xwuTnV/hakC6LOGJqicQyjH.wDiM7PQhWa')
-ON CONFLICT (doctor_id) DO NOTHING;
+ON CONFLICT (doctor_id) DO UPDATE SET password_hash = EXCLUDED.password_hash; -- 🌟 改成這行，強迫覆蓋舊密碼！;
 
 -- 初始病患資料（3 位虛構病患）
 INSERT INTO patient (chart_no, name, gender, birth_date, phone) VALUES
