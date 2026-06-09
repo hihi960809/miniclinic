@@ -30,9 +30,9 @@ public class LoginController {
     public String login(@Valid @ModelAttribute("loginForm") LoginForm form, BindingResult result, HttpSession session, Model model) {
         if (result.hasErrors()) return "login";
 
-        // 🌟 暫時改成這樣（把 BCrypt.checkpw 換成簡單的 equals）
+        // 🔒 請把這段改回來
 Doctor doctor = doctorRepo.findById(form.getDoctorId()).orElse(null);
-if (doctor == null || !form.getPassword().equals("pass1234")) {
+if (doctor == null || !BCrypt.checkpw(form.getPassword(), doctor.getPasswordHash())) { // 恢復這行
     model.addAttribute("errorMessage", "醫師編號或密碼錯誤");
     return "login";
 }
