@@ -5,10 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore; 
+// 💡 新增：引入 Spring Security 需要的套件
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "doctor")
-public class Doctor {
+public class Doctor implements UserDetails { // 🌟 修改：讓類別實作 UserDetails
 
     @Id
     @Column(name = "doctor_id", length = 10)
@@ -29,9 +34,9 @@ public class Doctor {
     private String passwordHash;
 
     // 建構子、getters、setters...
-	
-	// 新增：密碼 getters and setters
-	public String getPasswordHash() {
+    
+    // 新增：密碼 getters and setters
+    public String getPasswordHash() {
         return passwordHash;
     }
 
@@ -61,4 +66,36 @@ public class Doctor {
     public void setName(String name) { this.name = name; }
     public void setDepartment(String department) { this.department = department; }
     public void setSpecialty(String specialty) { this.specialty = specialty; }
+
+
+    // =========================================================================
+    // 🌟 5. 新增：以下為 Spring Security UserDetails 必備的安全驗證邏輯
+    // =========================================================================
+    
+    @Override
+    public String getPassword() {
+        return this.passwordHash; // 🎯 關鍵：引導框架來這裡讀取密碼雜湊值
+    }
+
+    @Override
+    public String getUsername() {
+        return this.doctorId;     // 🎯 關鍵：引導框架將 doctorId 視為登入帳號
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList(); // 暫不設定角色權限，回傳空列表
+    }
+
+    @Override
+    public boolean isAccountNonExpired() { return true; } // 帳號未過期
+
+    @Override
+    public boolean isAccountNonLocked() { return true; }  // 帳號未鎖定
+
+    @Override
+    public boolean isCredentialsNonExpired() { return true; } // 憑證未過期
+
+    @Override
+    public boolean isEnabled() { return true; } // 帳號可用
 }
