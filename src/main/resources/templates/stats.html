@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>MiniClinic 數據統計看板</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 50px auto; padding: 0 20px; }
+        h1 { color: #0F2443; border-bottom: 3px solid #14B8A6; padding-bottom: 8px; }
+        .summary-container { display: flex; gap: 15px; margin: 20px 0; }
+        .summary-card { flex: 1; background: #0F2443; color: white; padding: 15px; border-radius: 8px; text-align: center; }
+        .summary-card .number { font-size: 24px; font-weight: bold; color: #5EEAD4; }
+        .stat-card { background: #F1F5F9; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 5px solid #14B8A6; display: flex; justify-content: space-between; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>🏥 MiniClinic 數據統計看板</h1>
+
+    <div class="summary-container">
+        <div class="summary-card">
+            <h3>醫師總數</h3>
+            <div class="number" id="totalDoctors">0</div>
+        </div>
+        <div class="summary-card">
+            <h3>病患總數</h3>
+            <div class="number" id="totalPatients">0</div>
+        </div>
+        <div class="summary-card">
+            <h3>掛號總數</h3>
+            <div class="number" id="totalAppointments">0</div>
+        </div>
+    </div>
+
+    <h2>📊 依科別分組的掛號數</h2>
+    <div id="dept-container">載入中...</div>
+
+    <script>
+        fetch('/api/dashboard/data')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('totalDoctors').innerText = data.totalDoctors;
+                document.getElementById('totalPatients').innerText = data.totalPatients;
+                document.getElementById('totalAppointments').innerText = data.totalAppointments;
+
+                const container = document.getElementById('dept-container');
+                container.innerHTML = '';
+                data.departments.forEach(item => {
+                    container.innerHTML += `
+                        <div class="stat-card">
+                            <span>${item[0]}</span>
+                            <span style="color:#0D9488">${item[1]} 筆</span>
+                        </div>
+                    `;
+                });
+            });
+    </script>
+</body>
+</html>
