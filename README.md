@@ -5,7 +5,7 @@ MiniClinic 是一個基於 Spring Boot 與 Thymeleaf 打造的輕量級線上醫
 ---
 
 ## 🌐 線上 Demo 網址
-* **展示網址**：https://github.com/hihi960809/miniclinic
+* **展示網址**：https://miniclinic-gszc.onrender.com
 
 ---
 
